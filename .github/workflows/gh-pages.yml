@@ -24,7 +24,7 @@ jobs:
       - name: 'Installing deps'
         run: yarn
       - name: 'Test'
-        run: yarn test --if-present
+        run: yarn test
       - name: 'Build'
         run: yarn build --if-present
       - name: 'Deploy'
