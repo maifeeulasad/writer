@@ -4,6 +4,7 @@ import reportWebVitals from './reportWebVitals';
 import {Editor} from "./components/editor";
 
 import 'antd/dist/antd.css';
+import './index.css'
 
 ReactDOM.render(
   <React.StrictMode>
