@@ -3,12 +3,14 @@ import {Editor} from "@tinymce/tinymce-react";
 
 import './TinyMceEditor.css'
 
+/*
 interface Props{
     dimension?: {
         height: number;
         width: number;
     }
 }
+*/
 
 const TinyMceEditor = () => {
     return(
