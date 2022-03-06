@@ -1,3 +1,3 @@
-import {TinyMceEditor} from "./TinyMceEditor";
+import {TinyMceEditor} from "./tinymce/TinyMceEditor";
 
 export {TinyMceEditor as Editor}
