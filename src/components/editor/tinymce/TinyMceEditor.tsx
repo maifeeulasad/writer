@@ -8,15 +8,15 @@ interface TinyMceEditorHandle {
 }
 
 const TinyMceEditor: ForwardRefRenderFunction<TinyMceEditorHandle> = (_, forwardRef) => {
-    const ref = useRef<Editor | null>(null);
+    // const ref = useRef<Editor | null>(null);
 
     useImperativeHandle(forwardRef, () => ({
-        getHtml: () => ref.current?.editor?.getContent()
+        getHtml: () => '' // ref.current?.editor?.getContent()
     }));
 
     return (
         <Editor
-            ref={ref}
+            // ref={ref}
             init={{
                 plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
                 menubar: 'file edit view insert format tools table',
@@ -25,12 +25,12 @@ const TinyMceEditor: ForwardRefRenderFunction<TinyMceEditorHandle> = (_, forward
                 branding: false,
                 statusbar: false,
                 setup: (editor => {
-                    editor.ui.registry.addButton('toBlog', {
-                        text: "To Blog",
-                        onAction: () => {
-                            console.debug(ref.current?.editor?.getContent())
-                        }
-                    })
+                    // editor.ui.registry.addButton('toBlog', {
+                    //     text: "To Blog",
+                    //     onAction: () => {
+                    //         console.debug(ref.current?.editor?.getContent())
+                    //     }
+                    // })
                 })
             }}
 
