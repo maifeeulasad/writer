@@ -7,7 +7,7 @@ interface IPropsContent {}
 class Content extends React.Component<IPropsContent> {
   render() {
     return (
-      <div style={{ margin: "20px", height: "80%", flex: "grow" }}>
+      <div style={{ margin: "20px", flex: "grow" }}>
         <AntdContent>{this.props.children}</AntdContent>
       </div>
     );
