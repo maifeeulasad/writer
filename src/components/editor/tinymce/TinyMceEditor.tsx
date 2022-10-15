@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
+// import React, { useEffect, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 import "./TinyMceEditor.css";

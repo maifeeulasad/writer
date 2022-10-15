@@ -4,7 +4,7 @@ import { Footer as AntdFooter } from "antd/lib/layout/layout";
 const Footer = () => (
   <AntdFooter>
     <div style={{ textAlign: "center" }}>
-      {new Date().getFullYear()} - Maifee Ul Asad
+      &copy; {new Date().getFullYear()} - Maifee Ul Asad
     </div>
   </AntdFooter>
 );
