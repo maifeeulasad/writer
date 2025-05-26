@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Modal, Input } from 'antd';
+import { Button, Modal, Input, Checkbox } from 'antd';
 import { writeForMe } from '../../core/ai/InBrowserAi';
 
 const GenerateText = () => {
     const [modalVisibility, setModalVisibility] = useState<boolean>(false);
     const [inputText, setInputText] = useState<string>('');
     const [outputText, setOutputText] = useState<string>('');
+    const [clearPrevious, setClearPrevious] = useState<boolean>(false);
 
     return (
         <div>
@@ -27,6 +28,9 @@ const GenerateText = () => {
                         Close
                     </Button>,
                     <Button key="submit" type="primary" onClick={() => {
+                        if (clearPrevious) {
+                            setOutputText('');
+                        }
                         writeForMe({
                             prompt: inputText,
                             onChunk: (chunk) => {
@@ -52,6 +56,10 @@ const GenerateText = () => {
                     onChange={(e) => setInputText(e.target.value)}
                     value={inputText}
                 />
+                <div>
+                    Clear previous output before generating new text?
+                    <Checkbox value={clearPrevious} onChange={(e) => { setClearPrevious(e.target.checked) }} />
+                </div>
                 <Input.TextArea
                     rows={10}
                     placeholder="Generated text will appear here..."
