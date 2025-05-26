@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client';
 import reportWebVitals from "./reportWebVitals";
 import { Header } from "./components/header/Header";
 import { Footer } from "./components/footer/Footer";
@@ -10,7 +10,9 @@ import "./index.css";
 import Layout from "antd/lib/layout/layout";
 import { App } from "./App";
 
-ReactDOM.render(
+const container = document.getElementById('root') as HTMLElement;
+const root = createRoot(container);
+root.render(
   <React.StrictMode>
     <>
       <Layout style={{ minHeight: "100vh" }}>
@@ -21,8 +23,7 @@ ReactDOM.render(
         <Footer />
       </Layout>
     </>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
 
 reportWebVitals();
