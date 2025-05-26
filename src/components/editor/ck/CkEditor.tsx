@@ -13,7 +13,7 @@ export type CkEditorRef = {
 
 const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
   const editorInstance = useRef<any>(null);
-  const [__, setEditorLoaded] = useState(false);
+  const [, setEditorLoaded] = useState(false);
 
   useImperativeHandle(ref, () => ({
     appendData: (data: string) => {
