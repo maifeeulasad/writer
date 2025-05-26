@@ -1,8 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { Content as AntdContent } from "antd/lib/layout/layout";
 
-interface IPropsContent {}
+interface IPropsContent {
+  children: ReactNode;
+}
 
 class Content extends React.Component<IPropsContent> {
   render() {
