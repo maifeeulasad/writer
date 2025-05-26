@@ -21,7 +21,7 @@ const SummarizeText = ({ editor }: ISummarizeText) => {
         }
 
         const input = editor.getData();
-        console.log("Input for summarization:", input);
+        console.debug("Input for summarization:", input);
         setSummary("");
         setVisible(true);
         setLoading(true);
