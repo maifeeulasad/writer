@@ -41,7 +41,7 @@ const GenerateText = ({ enterOnEditor }: IGenerateText) => {
                                 setOutputText((prev) => prev + chunk);
                             },
                             onComplete: () => {
-                                console.log('Text generation complete');
+                                console.debug('Text generation complete');
                             },
                             onError: (error) => {
                                 console.error('Error during text generation:', error);
