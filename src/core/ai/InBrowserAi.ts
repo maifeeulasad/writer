@@ -1,3 +1,37 @@
+// Define expected monitor type, assuming it's like EventTarget or Worker
+type Monitor = {
+    addEventListener: (type: string, listener: (e: ProgressEvent) => void) => void;
+};
+
+const downloadWriterModal = async (): Promise<void> => {
+    // @ts-ignore
+    await Writer.create({
+        monitor: (m: Monitor) => {
+            m.addEventListener("downloadprogress", (e: ProgressEvent) => {
+                const percent = ((e.loaded / (e.total || 1)) * 100).toFixed(2);
+                console.log(`Writer downloaded ${percent}%`);
+            });
+        },
+    });
+};
+
+const downloadSummarizerModal = async (): Promise<void> => {
+    // @ts-ignore
+    await Summarizer.create({
+        monitor: (m: Monitor) => {
+            m.addEventListener("downloadprogress", (e: ProgressEvent) => {
+                const percent = ((e.loaded / (e.total || 1)) * 100).toFixed(2);
+                console.log(`Summarizer downloaded ${percent}%`);
+            });
+        },
+    });
+};
+
+const downloadModels = async (): Promise<void> => {
+    await downloadWriterModal();
+    await downloadSummarizerModal();
+};
+
 interface IGenerateText {
     prompt: string;
     onChunk: (chunk: string) => void;
@@ -88,4 +122,4 @@ const summarizeForMe = async ({ input, onChunk, onComplete, onError }: ISummariz
     }
 };
 
-export { writeForMe, summarizeForMe };
+export { writeForMe, summarizeForMe, downloadModels, downloadWriterModal, downloadSummarizerModal };
