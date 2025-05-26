@@ -64,7 +64,7 @@ const summarizeForMe = async ({ input, onChunk, onComplete, onError }: ISummariz
 
         if (availability === "requires-download") {
             summarizer.addEventListener("downloadprogress", (e: any) => {
-                console.log(`Downloaded ${e.loaded * 100}%`);
+                console.debug(`Downloaded ${e.loaded * 100}%`);
             });
 
             await summarizer.ready;
