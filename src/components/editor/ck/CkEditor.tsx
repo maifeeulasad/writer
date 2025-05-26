@@ -7,7 +7,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "./CkEditor.css";
 
 export type CkEditorRef = {
-  appendData: (data: string) => void;
+  appendData?: (data: string) => void;
+  getData?: () => string;
 };
 
 const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
@@ -22,6 +23,12 @@ const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
         const existingData = editorInstance.current.getData();
         editorInstance.current.setData(existingData + data);
       }
+    },
+    getData: () => {
+      if (editorInstance.current) {
+        return editorInstance.current.getData();
+      }
+      return "";
     },
   }));
 
