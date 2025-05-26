@@ -1,6 +1,6 @@
 import React from "react";
 import { Header as AntdHeader } from "antd/lib/layout/layout";
-import PageHeader from "antd/lib/page-header";
+import { PageHeader } from "@ant-design/pro-components";
 
 const Header = () => (
   <AntdHeader style={{backgroundColor: "transparent"}}>
