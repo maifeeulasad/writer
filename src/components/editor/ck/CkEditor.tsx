@@ -18,7 +18,7 @@ const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
 
   useImperativeHandle(ref, () => ({
     appendData: (data: string) => {
-      console.log("Appending data to CKEditor measw:", data);
+      console.debug("Appending data to CKEditor measw:", data);
       if (editorInstance.current) {
         const existingData = editorInstance.current.getData();
         editorInstance.current.setData(existingData + data);
@@ -65,12 +65,12 @@ const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
       onReady={(editor: any) => {
         editorInstance.current = editor;
         setEditorLoaded(true);
-        console.log("Editor is ready to use!", editor);
-        console.log(
+        console.debug("Editor is ready to use!", editor);
+        console.debug(
           "toolbar: ",
           Array.from(editor.ui.componentFactory.names())
         );
-        console.log(
+        console.debug(
           "plugins: ",
           ClassicEditor.builtinPlugins.map((plugin: any) => plugin.pluginName)
         );
@@ -78,13 +78,13 @@ const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
       onChange={(event: any, editor: any) => {
         editorInstance.current = editor;
         const data = editor.getData();
-        console.log({ event, editor, data });
+        console.debug({ event, editor, data });
       }}
       onBlur={(editor: any) => {
-        console.log("Blur.", editor);
+        console.debug("Blur.", editor);
       }}
       onFocus={(editor: any) => {
-        console.log("Focus.", editor);
+        console.debug("Focus.", editor);
       }}
     />
   );
