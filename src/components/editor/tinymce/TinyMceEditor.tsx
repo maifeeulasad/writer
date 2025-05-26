@@ -17,9 +17,9 @@ const TinyMceEditor = () => {
   // const editorRef = useRef<any>();
 
   // const onResize = () => {
-  //   console.log(editorRef.current.editor.height);
+  //   console.debug(editorRef.current.editor.height);
   //   editorRef.current.editor.height = Math.floor(window.innerHeight * 0.7);
-  //   console.log("here", window.innerHeight * 0.7);
+  //   console.debug("here", window.innerHeight * 0.7);
   // };
 
   // useEffect(() => {
