@@ -13,8 +13,7 @@ export type CkEditorRef = {
 
 const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
   const editorInstance = useRef<any>(null);
-  // eslint-disable-next-line
-  const [editorLoaded, setEditorLoaded] = useState(false);
+  const [__, setEditorLoaded] = useState(false);
 
   useImperativeHandle(ref, () => ({
     appendData: (data: string) => {
