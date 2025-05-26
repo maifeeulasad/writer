@@ -5,7 +5,6 @@ import { Header } from "./components/header/Header";
 import { Footer } from "./components/footer/Footer";
 import { Content } from "./components/content/Content";
 
-import "antd/dist/antd.min.css";
 import "./index.css";
 import Layout from "antd/lib/layout/layout";
 import { App } from "./App";
