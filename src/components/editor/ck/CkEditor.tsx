@@ -12,6 +12,7 @@ export type CkEditorRef = {
 
 const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
   const editorInstance = useRef<any>(null);
+  // @ts-ignore
   const [editorLoaded, setEditorLoaded] = useState(false);
 
   useImperativeHandle(ref, () => ({
