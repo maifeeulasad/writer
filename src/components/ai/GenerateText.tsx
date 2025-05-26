@@ -25,7 +25,7 @@ const GenerateText = ({ enterOnEditor }: IGenerateText) => {
 
             <Modal
                 title="Generate Text"
-                visible={modalVisibility}
+                open={modalVisibility}
                 onCancel={() => setModalVisibility(false)}
                 footer={[
                     <Button key="back" onClick={() => setModalVisibility(false)}>

@@ -51,7 +51,7 @@ const SummarizeText = ({ editor }: ISummarizeText) => {
 
             <Modal
                 title="Summarizing..."
-                visible={visible}
+                open={visible}
                 onCancel={() => {
                     setVisible(false);
                     setSummary("");
