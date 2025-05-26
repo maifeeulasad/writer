@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, forwardRef, useImperativeHandle, useRef } from "react";
 // @ts-ignore
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 // @ts-ignore
@@ -6,7 +6,24 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import "./CkEditor.css";
 
-const CkEditor = () => {
+export type CkEditorRef = {
+  appendData: (data: string) => void;
+};
+
+const CkEditor = forwardRef<CkEditorRef>((_, ref) => {
+  const editorInstance = useRef<any>(null);
+  const [editorLoaded, setEditorLoaded] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    appendData: (data: string) => {
+      console.log("Appending data to CKEditor measw:", data);
+      if (editorInstance.current) {
+        const existingData = editorInstance.current.getData();
+        editorInstance.current.setData(existingData + data);
+      }
+    },
+  }));
+
   return (
     <CKEditor
       editor={ClassicEditor}
@@ -38,7 +55,8 @@ const CkEditor = () => {
         ],
       }}
       onReady={(editor: any) => {
-        // You can store the "editor" and use when it is needed.
+        editorInstance.current = editor;
+        setEditorLoaded(true);
         console.log("Editor is ready to use!", editor);
         console.log(
           "toolbar: ",
@@ -50,6 +68,7 @@ const CkEditor = () => {
         );
       }}
       onChange={(event: any, editor: any) => {
+        editorInstance.current = editor;
         const data = editor.getData();
         console.log({ event, editor, data });
       }}
@@ -61,6 +80,6 @@ const CkEditor = () => {
       }}
     />
   );
-};
+});
 
 export { CkEditor };
