@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Button, Modal, Input, Checkbox } from 'antd';
 import { writeForMe } from '../../core/ai/InBrowserAi';
 
-const GenerateText = () => {
+interface IGenerateText {
+    enterOnEditor: (text: string) => void;
+}
+
+const GenerateText = ({ enterOnEditor }: IGenerateText) => {
     const [modalVisibility, setModalVisibility] = useState<boolean>(false);
     const [inputText, setInputText] = useState<string>('');
     const [outputText, setOutputText] = useState<string>('');
@@ -46,6 +50,14 @@ const GenerateText = () => {
                         });
                     }}>
                         Generate
+                    </Button>,
+                    <Button key="toeditor" type="primary" onClick={() => {
+                        if (outputText) {
+                            enterOnEditor(outputText);
+                            setModalVisibility(false);
+                        }
+                    }}>
+                        Enter in Editor
                     </Button>,
                 ]}
             >
