@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Modal, Spin, Typography, message } from "antd";
 import { summarizeForMe } from "../../core/ai/InBrowserAi";
 import { CkEditorRef } from "../editor/ck/CkEditor";
