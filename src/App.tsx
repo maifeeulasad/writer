@@ -19,7 +19,7 @@ const App = () => {
     }, []);
 
     const enterOnEditor = (text: string) => {
-        console.log('Entering text into editor:', text);
+        console.debug('Entering text into editor:', text);
         editorRef.current?.appendData?.(text);
     }
 
