@@ -1,4 +1,3 @@
-// import {TinyMceEditor} from "./tinymce/TinyMceEditor";
-import { CkEditor } from "./ck/CkEditor";
+import { EditorJsEditor } from "./editorjs/EditorJsEditor";
 
-export {CkEditor as Editor}
+export {EditorJsEditor as Editor}
