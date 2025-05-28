@@ -2,9 +2,7 @@ import React from 'react';
 
 import EditorJS from '@editorjs/editorjs';
 
-
-
-const EditorJs = () => {
+const EditorJsEditor = () => {
 
     new EditorJS({
         holder: 'editorjs'
@@ -14,4 +12,4 @@ const EditorJs = () => {
     );
 }
 
-export { EditorJs }
+export { EditorJsEditor }
