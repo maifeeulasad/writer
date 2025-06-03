@@ -47,6 +47,9 @@ importers:
       react-scripts:
         specifier: 5.0.1
         version: 5.0.1(@babel/plugin-syntax-flow@7.27.1(@babel/core@7.27.1))(@babel/plugin-transform-react-jsx@7.27.1(@babel/core@7.27.1))(@types/babel__core@7.20.5)(eslint@8.10.0)(react@19.1.0)(type-fest@0.21.3)(typescript@5.8.3)
+      react-simple-wysiwyg:
+        specifier: ^3.2.2
+        version: 3.2.2(react@19.1.0)
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
@@ -5058,6 +5061,11 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
+
+  react-simple-wysiwyg@3.2.2:
+    resolution: {integrity: sha512-mHngkK1IgkZ/CVdGe6XRtE+w1Fr4U3nVN/Yynj7S+xN/uiVJEI/x0jug/nVMN9jJ/KoveL4dM0/ZLiS7HGz93g==}
+    peerDependencies:
+      react: '>=16.8'
 
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
@@ -12442,6 +12450,10 @@ snapshots:
       - webpack-cli
       - webpack-hot-middleware
       - webpack-plugin-serve
+
+  react-simple-wysiwyg@3.2.2(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   react@19.1.0: {}
 
