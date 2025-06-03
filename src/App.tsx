@@ -1,8 +1,8 @@
 import React from 'react';
-import { EditorJsEditor } from './components/editor/editorjs/EditorJsEditor';
+import { Editor } from './components/editor';
 
 const App = () => {
-    return <EditorJsEditor />
+    return <Editor />
 };
 
 export { App };
