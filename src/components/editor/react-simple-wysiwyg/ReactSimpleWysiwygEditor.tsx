@@ -10,6 +10,49 @@ import { writeForMe, summarizeForMe } from '../../../core/ai/InBrowserAi';
 
 const { Paragraph, Text } = Typography;
 
+const GenerateModalContent = ({
+  inputText,
+  setInputText,
+  clearPrevious,
+  setClearPrevious,
+}: {
+  inputText: string;
+  setInputText: (t: string) => void;
+  clearPrevious: boolean;
+  setClearPrevious: (v: boolean) => void;
+}) => (
+  <>
+    <Input.TextArea
+      rows={4}
+      placeholder="Enter your prompt here..."
+      style={{ marginBottom: '16px' }}
+      onChange={(e) => setInputText(e.target.value)}
+      value={inputText}
+    />
+    <Checkbox
+      checked={clearPrevious}
+      onChange={(e) => setClearPrevious(e.target.checked)}
+      style={{ marginBottom: '16px' }}
+    >
+      Clear previous output before generating new text
+    </Checkbox>
+  </>
+);
+
+const OutputTextViewer = ({ outputText }: { outputText: string }) => (
+  <Typography>
+    {outputText ? (
+      <Paragraph>
+        {outputText.split('\n').map((line, index) => (
+          <Text key={index}>{line}<br /></Text>
+        ))}
+      </Paragraph>
+    ) : (
+      <Text type="secondary">Waiting for output...</Text>
+    )}
+  </Typography>
+);
+
 const ReactSimpleWysiwygEditor = () => {
   const [html, setHtml] = useState('my <b>HTML</b>');
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,12 +66,14 @@ const ReactSimpleWysiwygEditor = () => {
 
   const handleGenerate = () => {
     if (clearPrevious) setOutputText('');
+    setLoading(true);
     writeForMe({
       prompt: inputText,
-      onChunk: (chunk) => setOutputText(prev => prev + chunk),
-      onComplete: () => console.debug('Text generation complete'),
+      onChunk: (chunk) => setOutputText((prev) => prev + chunk),
+      onComplete: () => setLoading(false),
       onError: (err) => {
         console.error(err);
+        setLoading(false);
         setOutputText('An error occurred during text generation.');
       },
     });
@@ -39,7 +84,7 @@ const ReactSimpleWysiwygEditor = () => {
     setLoading(true);
     await summarizeForMe({
       input: html,
-      onChunk: (chunk) => setOutputText(prev => prev + chunk),
+      onChunk: (chunk) => setOutputText((prev) => prev + chunk),
       onComplete: () => setLoading(false),
       onError: (err) => {
         setLoading(false);
@@ -51,7 +96,7 @@ const ReactSimpleWysiwygEditor = () => {
 
   const openModal = (type: 'generate' | 'summarize') => {
     setModalType(type);
-    setInputText(type === 'generate' ? '' : html);
+    setOutputText('');
     if (type === 'generate') {
       setInputText('');
     } else {
@@ -86,13 +131,13 @@ const ReactSimpleWysiwygEditor = () => {
         footer={[
           <Button key="close" onClick={() => setModalVisible(false)}>Close</Button>,
           modalType === 'generate' && (
-            <Button key="generate" type="primary" onClick={handleGenerate}>
+            <Button key="generate" type="primary" disabled={loading} onClick={handleGenerate}>
               Generate
             </Button>
           ),
           modalType === 'generate' && (
-            <Button key="insert" type="primary" onClick={() => {
-              setHtml(prev => clearPrevious ? outputText : prev + outputText);
+            <Button key="insert" type="primary" disabled={loading} onClick={() => {
+              setHtml((prev) => clearPrevious ? outputText : prev + outputText);
               setModalVisible(false);
             }}>
               Enter in Editor
@@ -103,36 +148,15 @@ const ReactSimpleWysiwygEditor = () => {
         bodyStyle={{ maxHeight: 500, overflowY: 'auto' }}
       >
         {modalType === 'generate' && (
-          <>
-            <Input.TextArea
-              rows={4}
-              placeholder="Enter your prompt here..."
-              style={{ marginBottom: '16px' }}
-              onChange={(e) => setInputText(e.target.value)}
-              value={inputText}
-            />
-            <Checkbox
-              checked={clearPrevious}
-              onChange={(e) => setClearPrevious(e.target.checked)}
-              style={{ marginBottom: '16px' }}
-            >
-              Clear previous output before generating new text
-            </Checkbox>
-          </>
+          <GenerateModalContent
+            inputText={inputText}
+            setInputText={setInputText}
+            clearPrevious={clearPrevious}
+            setClearPrevious={setClearPrevious}
+          />
         )}
-
         <Spin spinning={loading}>
-          <Typography>
-            {outputText ? (
-              <Paragraph>
-                {outputText.split('\n').map((line, index) => (
-                  <Text key={index}>{line}<br /></Text>
-                ))}
-              </Paragraph>
-            ) : (
-              <Text type="secondary">Waiting for {modalType} output...</Text>
-            )}
-          </Typography>
+          <OutputTextViewer outputText={outputText} />
         </Spin>
       </Modal>
     </>
