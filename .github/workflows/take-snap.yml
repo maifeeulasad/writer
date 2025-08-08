@@ -26,7 +26,7 @@ jobs:
       - name: 'Build'
         run: pnpm build
       - name: 'Install Playwright'
-        run: pnpm dlx playwright install --with-deps
+        run: npx --yes playwright install && pnpm dlx playwright install --with-deps
       - name: 'Serve built site'
         run: pnpm dlx serve build -l 3000 &
         env:
