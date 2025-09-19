@@ -4,24 +4,32 @@ import { writeForMe } from '../../core/ai/InBrowserAi';
 
 interface IGenerateText {
     enterOnEditor: (text: string) => void;
+    modalVisibility?: boolean;
+    setModalVisibility?: (visible: boolean) => void;
+    showButton?: boolean;
 }
 
-const GenerateText = ({ enterOnEditor }: IGenerateText) => {
-    const [modalVisibility, setModalVisibility] = useState<boolean>(false);
+const GenerateText = ({ enterOnEditor, modalVisibility: externalModalVisibility, setModalVisibility: externalSetModalVisibility, showButton = true }: IGenerateText) => {
+    const [internalModalVisibility, setInternalModalVisibility] = useState<boolean>(false);
     const [inputText, setInputText] = useState<string>('');
     const [outputText, setOutputText] = useState<string>('');
     const [clearPrevious, setClearPrevious] = useState<boolean>(false);
 
+    const modalVisibility = externalModalVisibility ?? internalModalVisibility;
+    const setModalVisibility = externalSetModalVisibility ?? setInternalModalVisibility;
+
     return (
         <div>
-            <Button
-                type="primary"
-                onClick={() => {
-                    setModalVisibility(true);
-                }}
-            >
-                Generate Text
-            </Button>
+            {showButton && (
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        setModalVisibility(true);
+                    }}
+                >
+                    Generate Text
+                </Button>
+            )}
 
             <Modal
                 title="Generate Text"
