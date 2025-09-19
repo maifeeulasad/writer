@@ -1,85 +1,143 @@
-import React from "react";
-// import React, { useState } from "react";
-// import { Button, Modal, Spin, Typography, message } from "antd";
-// import { summarizeForMe } from "../../core/ai/InBrowserAi";
-// import { CkEditorRef } from "../editor/ck/CkEditor";
+import React, { useState, useEffect } from "react";
+import { Button, Modal, Spin, Typography, message } from "antd";
+import { summarizeForMe } from "../../core/ai/InBrowserAi";
 
-// const { Paragraph, Text } = Typography;
+const { Paragraph, Text } = Typography;
 
-// interface ISummarizeText {
-//     editor?: CkEditorRef | null;
-// }
+interface ISummarizeText {
+    getContent: () => string;
+    modalVisibility?: boolean;
+    setModalVisibility?: (visible: boolean) => void;
+    showButton?: boolean;
+}
 
-// const SummarizeText = ({ editor }: ISummarizeText) => {
-//     const [visible, setVisible] = useState(false);
-//     const [loading, setLoading] = useState(false);
-//     const [summary, setSummary] = useState("");
+const SummarizeText = ({ getContent, modalVisibility: externalModalVisibility, setModalVisibility: externalSetModalVisibility, showButton = true }: ISummarizeText) => {
+    const [internalVisible, setInternalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [summary, setSummary] = useState("");
 
-//     const handleSummarize = async () => {
-//         if (!editor || !editor.getData) {
-//             message.error("Editor not available.");
-//             return;
-//         }
+    const visible = externalModalVisibility ?? internalVisible;
+    console.log('SummarizeText render - externalModalVisibility:', externalModalVisibility, 'internalVisible:', internalVisible, 'visible:', visible);
+    const setVisible = externalSetModalVisibility ?? setInternalVisible;
 
-//         const input = editor.getData();
-//         console.debug("Input for summarization:", input);
-//         setSummary("");
-//         setVisible(true);
-//         setLoading(true);
+    // Auto-start summarization when modal becomes visible (for external modal control)
+    useEffect(() => {
+        if (visible && externalModalVisibility !== undefined && !loading && !summary) {
+            console.log('Modal became visible via external control, starting summarization');
+            handleSummarize();
+        }
+    }, [visible, externalModalVisibility, loading, summary]);
 
-//         await summarizeForMe({
-//             input,
-//             onChunk: (chunk) => {
-//                 setSummary((prev) => prev + chunk);
-//             },
-//             onComplete: () => {
-//                 setLoading(false);
-//             },
-//             onError: (err) => {
-//                 setLoading(false);
-//                 message.error("Summary generation failed.");
-//                 console.error("Error during summarization:", err);
-//                 setSummary("An error occurred during summary generation.");
-//             },
-//         });
-//     };
+    // Reset state when modal is closed externally
+    useEffect(() => {
+        if (!visible && externalModalVisibility !== undefined) {
+            console.log('Modal closed externally, resetting state');
+            setSummary("");
+            setLoading(false);
+        }
+    }, [visible, externalModalVisibility]);
 
-//     return (
-//         <>
-//             <Button type="primary" onClick={handleSummarize}>
-//                 Summarize Text
-//             </Button>
+    const handleSummarize = async () => {
+        console.log('handleSummarize called');
+        const input = getContent();
+        console.debug("Input for summarization:", input);
+        console.debug("Input length:", input.length);
 
-//             <Modal
-//                 title="Summarizing..."
-//                 open={visible}
-//                 onCancel={() => {
-//                     setVisible(false);
-//                     setSummary("");
-//                     setLoading(false);
-//                 }}
-//                 footer={null}
-//                 width={700}
-//                 bodyStyle={{ maxHeight: 400, overflowY: "auto" }}
-//             >
-//                 <Spin spinning={loading}>
-//                     <Typography>
-//                         {summary ? (
-//                             <Paragraph>
-//                                 {summary.split("\n").map((line, index) => (
-//                                     <Text key={index}>{line}<br /></Text>
-//                                 ))}
-//                             </Paragraph>
-//                         ) : (
-//                             <Text type="secondary">Waiting for summary to appear...</Text>
-//                         )}
-//                     </Typography>
-//                 </Spin>
-//             </Modal>
-//         </>
-//     );
-// };
+        // Check if Summarizer API is available
+        // @ts-ignore
+        if (typeof window !== 'undefined' && !window.Summarizer) {
+            console.debug("Summarizer API not available, using fallback");
+            // Simple fallback summarization
+            const words = input.split(/\s+/).filter(word => word.length > 0);
+            const sentences = input.split(/[.!?]+/).filter(s => s.trim().length > 0);
 
-const SummarizeText = () => <></>
+            let summary = `This text contains ${words.length} words and ${sentences.length} sentences. `;
+
+            if (sentences.length > 0) {
+                summary += `Key points: ${sentences.slice(0, Math.min(3, sentences.length)).join('. ')}.`;
+            }
+
+            setSummary(summary);
+            setLoading(false);
+            return;
+        }
+
+        if (!input || input.trim() === '') {
+            message.error("No content to summarize. Please add some text to the editor first.");
+            return;
+        }
+
+        setSummary("");
+        // Only set visible if using internal modal control
+        if (externalModalVisibility === undefined) {
+            setVisible(true);
+        }
+        setLoading(true);
+
+        try {
+            await summarizeForMe({
+                input,
+                onChunk: (chunk) => {
+                    console.debug("Received chunk:", chunk);
+                    setSummary((prev) => prev + chunk);
+                },
+                onComplete: () => {
+                    console.debug("Summarization completed");
+                    setLoading(false);
+                },
+                onError: (err) => {
+                    console.error("Error during summarization:", err);
+                    setLoading(false);
+                    message.error("Summary generation failed.");
+                    setSummary("An error occurred during summary generation.");
+                },
+            });
+        } catch (error) {
+            console.error("Exception in handleSummarize:", error);
+            setLoading(false);
+            message.error("Failed to start summarization.");
+            setSummary("Failed to start summarization process.");
+        }
+    };
+
+    return (
+        <>
+            {showButton && (
+                <Button type="primary" onClick={handleSummarize}>
+                    Summarize Text
+                </Button>
+            )}
+
+            <Modal
+                title="Summarizing..."
+                open={visible}
+                onCancel={() => {
+                    setVisible(false);
+                    setSummary("");
+                    setLoading(false);
+                }}
+                footer={null}
+                width={700}
+                styles={{ body: { maxHeight: 400, overflowY: "auto" } }}
+            >
+                <Spin spinning={loading}>
+                    <Typography>
+                        {summary ? (
+                            <Paragraph>
+                                {summary.split("\n").map((line, index) => (
+                                    <Text key={index}>{line}<br /></Text>
+                                ))}
+                            </Paragraph>
+                        ) : loading ? (
+                            <Text type="secondary">Generating summary...</Text>
+                        ) : (
+                            <Text type="secondary">Waiting for summary to appear...</Text>
+                        )}
+                    </Typography>
+                </Spin>
+            </Modal>
+        </>
+    );
+};
 
 export { SummarizeText };
