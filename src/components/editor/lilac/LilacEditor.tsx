@@ -24,7 +24,18 @@ const LilacEditor = () => {
         toolbarButtons: [
             {
                 id: 'generate-button',
-                icon: <div>Gen</div>,
+                icon: <div style={{ 
+                    width: '16px', 
+                    height: '16px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    fontSize: '10px', 
+                    fontWeight: 'bold',
+                    backgroundColor: '#1677ff',
+                    color: 'white',
+                    borderRadius: '3px'
+                }}>AI</div>,
                 label: 'Generate Text',
                 tooltip: 'Generate text using AI',
                 onClick: (context: EditorContext) => {
@@ -44,7 +55,18 @@ const LilacEditor = () => {
         toolbarButtons: [
             {
                 id: 'summarize-button',
-                icon: <div>Summary</div>,
+                icon: <div style={{ 
+                    width: '16px', 
+                    height: '16px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    fontSize: '10px', 
+                    fontWeight: 'bold',
+                    backgroundColor: '#52c41a',
+                    color: 'white',
+                    borderRadius: '3px'
+                }}>∑</div>,
                 label: 'Summarize Text',
                 tooltip: 'Summarize text using AI',
                 onClick: (context: EditorContext) => {
