@@ -31,8 +31,12 @@ jobs:
         run: pnpm dlx serve build -l 3000 &
         env:
           PORT: 3000
+      - name: 'Wait for server to start'
+        run: sleep 3
       - name: 'Take snapshot with Playwright'
-        run: node snap.js
+        run: |
+          npx --yes playwright install chromium
+          node snap.js
       - name: 'Upload screenshot'
         uses: actions/upload-artifact@v4
         with:
