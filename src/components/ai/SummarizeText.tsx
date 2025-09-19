@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button, Modal, Spin, Typography, message } from "antd";
 import { summarizeForMe } from "../../core/ai/InBrowserAi";
 
@@ -20,24 +20,7 @@ const SummarizeText = ({ getContent, modalVisibility: externalModalVisibility, s
     console.log('SummarizeText render - externalModalVisibility:', externalModalVisibility, 'internalVisible:', internalVisible, 'visible:', visible);
     const setVisible = externalSetModalVisibility ?? setInternalVisible;
 
-    // Auto-start summarization when modal becomes visible (for external modal control)
-    useEffect(() => {
-        if (visible && externalModalVisibility !== undefined && !loading && !summary) {
-            console.log('Modal became visible via external control, starting summarization');
-            handleSummarize();
-        }
-    }, [visible, externalModalVisibility, loading, summary]);
-
-    // Reset state when modal is closed externally
-    useEffect(() => {
-        if (!visible && externalModalVisibility !== undefined) {
-            console.log('Modal closed externally, resetting state');
-            setSummary("");
-            setLoading(false);
-        }
-    }, [visible, externalModalVisibility]);
-
-    const handleSummarize = async () => {
+    const handleSummarize = useCallback(async () => {
         console.log('handleSummarize called');
         const input = getContent();
         console.debug("Input for summarization:", input);
@@ -98,7 +81,24 @@ const SummarizeText = ({ getContent, modalVisibility: externalModalVisibility, s
             message.error("Failed to start summarization.");
             setSummary("Failed to start summarization process.");
         }
-    };
+    }, [getContent, externalModalVisibility, setVisible, setSummary, setLoading]);
+
+    // Auto-start summarization when modal becomes visible (for external modal control)
+    useEffect(() => {
+        if (visible && externalModalVisibility !== undefined && !loading && !summary) {
+            console.log('Modal became visible via external control, starting summarization');
+            handleSummarize();
+        }
+    }, [visible, externalModalVisibility, loading, summary, handleSummarize]);
+
+    // Reset state when modal is closed externally
+    useEffect(() => {
+        if (!visible && externalModalVisibility !== undefined) {
+            console.log('Modal closed externally, resetting state');
+            setSummary("");
+            setLoading(false);
+        }
+    }, [visible, externalModalVisibility]);
 
     return (
         <>
